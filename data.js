@@ -1,18 +1,4 @@
-const express = require('express');
-const cors = require('cors')
-
-const app = express();
-
-const corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-
-app.use(cors());
-
-// List polygon
-
-const polygon = [{
+[{
   "type": "FeatureCollection",
   "features": [
     {
@@ -134,34 +120,3 @@ const polygon = [{
     }
   ]
 }];
-
-// GET /polygon
-app.get('/polygon', (req, res) => {
-  res.json({
-    data: polygon,
-  })
-});
-
-// GET /polygon/:id
-app.get('/polygon/:id', (req, res) => {
-  const id = req.params.id - 1;
-  res.json({
-    data: polygon[id] || null,
-  })
-});
-
-// POST /polygon
-
-app.post('/polygon', cors(corsOptions), (req, res) => {
-  // const data = req.body;
-  console.log(req.body)
-
-  // polygon.push(data);
-
-  res.json({
-    data: polygon[polygon.length],
-  })
-});
-
-
-app.listen(3000, () => console.log('listen on http://localhost:3000'));
