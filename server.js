@@ -9,6 +9,8 @@ const corsOptions = {
 }
 
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // List polygon
 
@@ -153,10 +155,10 @@ app.get('/polygon/:id', (req, res) => {
 // POST /polygon
 
 app.post('/polygon', cors(corsOptions), (req, res) => {
-  // const data = req.body;
+  const data = req.body;
   console.log(req.body)
 
-  // polygon.push(data);
+  polygon.push(data);
 
   res.json({
     data: polygon[polygon.length],
