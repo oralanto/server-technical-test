@@ -1,12 +1,12 @@
-const express = require('express');
-const cors = require('cors')
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
 const corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+  origin: "*",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 app.use(cors());
 app.use(express.json());
@@ -16,81 +16,60 @@ app.use(express.urlencoded({ extended: true }));
 
 const polygon = [
   {
-    name: 'coucou',
-    data: [{
-      "type": "FeatureCollection",
-      "features": [
-        {
-          "type": "Feature",
-          "properties": {},
-          "geometry": {
-            "type": "Polygon",
-            "coordinates": [
-              [
-                [
-                  6.116337776184082,
-                  46.17112338016706
-                ],
-                [
-                  6.112775802612305,
-                  46.16743807965959
-                ],
-                [
-                  6.116037368774414,
-                  46.165000890466054
-                ],
-                [
-                  6.123461723327637,
-                  46.165179225044035
-                ],
-                [
-                  6.124706268310546,
-                  46.16806222050015
-                ],
-                [
-                  6.121015548706055,
-                  46.171242256717555
-                ],
-                [
-                  6.116337776184082,
-                  46.17112338016706
-                ]
-              ]
-            ]
-          }
-        }
-      ]
-    },]
+    id: 1,
+    name: "polygon 1",
+    data:
+      '[{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[6.1387530317657575,46.20921408356362],[6.140270005030593,46.20684083188675],[6.145316496521049,46.20767293616188],[6.143400772942199,46.21079917737712],[6.140002918480436,46.2129079837066],[6.1387530317657575,46.20921408356362]]]}}]',
+  },
+  {
+    id: 2,
+    name: "polygon 2",
+    data:
+      '[{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[6.1387530317657575,46.20921408356362],[6.140270005030593,46.20684083188675],[6.145316496521049,46.20767293616188],[6.143400772942199,46.21079917737712],[6.140002918480436,46.2129079837066],[6.1387530317657575,46.20921408356362]]]}}]',
+  },
+  {
+    id: 3,
+    name: "polygon 3",
+    data:
+      '[{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[6.1387530317657575,46.20921408356362],[6.140270005030593,46.20684083188675],[6.145316496521049,46.20767293616188],[6.143400772942199,46.21079917737712],[6.140002918480436,46.2129079837066],[6.1387530317657575,46.20921408356362]]]}}]',
+  },
+  {
+    id: 4,
+    name: "polygon 4",
+    data:
+      '[{"type":"Feature","properties":{},"geometry":{"type":"Polygon","coordinates":[[[6.1387530317657575,46.20921408356362],[6.140270005030593,46.20684083188675],[6.145316496521049,46.20767293616188],[6.143400772942199,46.21079917737712],[6.140002918480436,46.2129079837066],[6.1387530317657575,46.20921408356362]]]}}]',
   },
 ];
 
 // GET /polygon
-app.get('/polygon', (req, res) => {
-  res.json({
+app.get("/polygon", (req, res) => {
+  res.send({
     polygon,
-  })
+  });
 });
 
-// GET /polygon/:name
-app.get('/polygon/:name', (req, res) => {
-  const name = req.params.name;
-  res.json({
-    data: polygon.filter((obj) => obj.name === name) || null,
-  })
+// GET /polygon/:id
+app.post("/polygon/:id", (req, res) => {
+  const reqId = parseInt(req.params.id);
+  // const findPolygon = polygon.find((poly) => poly.id === reqId);
+  polygon.splice([reqId - 1], 1)
+  polygon.splice(reqId -1, 0, req.body)
+  res.send({
+    polygon,
+  });
 });
 
 // POST /polygon
 
-app.post('/polygon', cors(corsOptions), (req, res) => {
-  const data = req.body;
-  console.log(req.body)
+app.post("/polygon", cors(corsOptions), (req, res) => {
+  const data = req.body
 
   polygon.push(data);
+  console.log(polygon);
 
   res.json({
-    data: polygon[polygon.length],
-  })
+    ...polygon[polygon.length],
+  });
 });
 
-
-app.listen(3000, () => console.log('listen on http://localhost:3000'));
+app.listen(3000, () => console.log("listen on http://localhost:3000"));
