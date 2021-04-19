@@ -1,1 +1,3 @@
-# server-technical-test API
+# server-technical-test
+
+Server with Node.js Express.js
